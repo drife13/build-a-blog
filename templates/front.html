@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    <h2>New Post</h2>
+    <label>
+        <div>Title</div>
+        <input type="text" name="title" value="{{title}}">
+    </label>
+
+    <label>
+        <div>Post</div>
+        <textarea name="body">{{body}}</textarea>
+    </label>
+
+    <div class="error">{{error}}</div>
+
+    <input type="submit">
+</form>
+
+<hr>
+    <h2>Old Posts</h2>
+{% for blogpost in blogposts %}
+    <div class="post">
+        <div class="post-title">{{blogpost.title}}</div>
+        <pre class="post-body">{{blogpost.body}}</pre>
+        <!-- preserves html white space -->
+    </div>
+{% endfor %}
+
+{% endblock %}

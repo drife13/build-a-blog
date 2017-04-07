@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2><a href="\newpost">Create New Post</a></h2>
+
+<hr>
+
+<h2>Old Posts</h2>
+{% for blogpost in blogposts %}
+    <div class="post">
+        <div class="post-title">{{blogpost.title}}</div>
+        <pre class="post-body">{{blogpost.body}}</pre>
+        <!-- preserves html white space -->
+    </div>
+{% endfor %}
+
+{% endblock %}
