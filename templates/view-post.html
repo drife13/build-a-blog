@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2><a href="\newpost">Create New Post</a></h2>
+
+<hr>
+
+<h2>Post #{{id}}</h2>
+<div class="post">
+    <div class="post-title">{{blogpost.title}}</div>
+    <pre class="post-body">{{blogpost.body}}</pre>
+</div>
+
+{% endblock %}

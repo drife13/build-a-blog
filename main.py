@@ -77,8 +77,16 @@ class NewPost(Handler):
             self.render_new_post_form(title, body, error)
 
 
+class ViewPost(Handler):
+     def get(self, id):
+         id = int(id)
+         blogpost = BlogPost.get_by_id(id)
+         self.render("view-post.html", blogpost=blogpost, id=id)
+
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/blog', Blog),
-    ('/newpost', NewPost)
+    ('/newpost', NewPost),
+    webapp2.Route('/blog/<id:\d+>', ViewPost)
 ], debug=True)
