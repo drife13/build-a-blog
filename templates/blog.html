@@ -2,19 +2,34 @@
 
 {% block content %}
 
-<h2><a href="\newpost">Create New Post</a></h2>
-
-<hr>
-
-<h2>Old Posts</h2>
-{% for blogpost in blogposts %}
-    <div class="post">
-        <div class="post-title">
-            <a href="\blog\{{blogpost.key().id()}}">{{blogpost.title}}</a>
+{% if blogposts %}
+    <h2>Previous Posts</h2>
+    {% for blogpost in blogposts %}
+        <div class="post">
+            <div class="post-title">
+                <a href="\blog\{{blogpost.key().id()}}">{{blogpost.title}}</a>
+            </div>
+            <p class="post-body">{{blogpost.body}}</p>
         </div>
-        <pre class="post-body">{{blogpost.body}}</pre>
-        <!-- preserves html white space -->
-    </div>
-{% endfor %}
+    {% endfor %}
+
+
+    <br>
+
+    {% if page>1 %}
+        <a href="/blog?page={{page-1}}">&lt; prev</a>
+    {% endif %}
+
+    {% if page>1 and next_page_count>0 %}
+        &nbsp;&nbsp; | &nbsp;&nbsp;
+    {% endif %}
+
+    {% if next_page_count>0 %}
+        <a href="/blog?page={{page+1}}">next &gt;</a>
+    {% endif %}
+
+{% else %}
+    <p>Error: Page number is out of range.</p>
+{% endif %}
 
 {% endblock %}

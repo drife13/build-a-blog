@@ -58,10 +58,17 @@
     </head>
 
     <body>
-        <h1>Blog!</h1>
+        <header>
+            <nav>
+                <a href="/blog">Home</a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="/newpost">New Post</a>
+            </nav>
+            <h1>Blog!</h1>
+        <header>
+
+        <hr>
 
     {% block content %}
     {% endblock %}
-    
+
     </body>
 </html>

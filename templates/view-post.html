@@ -10,7 +10,9 @@
     <h2>Post #{{id}}</h2>
     <div class="post">
         <div class="post-title">{{blogpost.title}}</div>
-        <pre class="post-body">{{blogpost.body}}</pre>
+        <p>
+            <pre class="post-body">{{blogpost.body}}</pre>
+        </p>
     </div>
 {% else %}
     <p>There is no post #{{id}}<p>

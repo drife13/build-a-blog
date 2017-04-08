@@ -26,40 +26,41 @@ class BlogPost(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
 
 
-class MainPage(Handler):
-    def render_front(self, title="", body="", error=""):
-        blogposts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC")
+def get_posts(limit, offset):
+    blogposts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC LIMIT "
+                            + str(limit) + " OFFSET " + str(offset))
+    return blogposts
 
-        self.render("front.html", title=title, body=body, error=error, blogposts=blogposts)
 
+class MainHandler(Handler):
     def get(self):
-        self.render_front()
-
-    def post(self):
-        title = self.request.get("title")
-        body = self.request.get("body")
-
-        if title and body:
-            b = BlogPost(title=title, body=body)
-            b.put() # stores post in database
-            self.redirect("/")
-        else:
-            error = "We need a title and some text!"
-            self.render_front(title, body, error)
+        self.redirect("/blog")
 
 
 class Blog(Handler):
-    def render_blog(self):
-        blogposts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC LIMIT 5")
-        self.render("blog.html", blogposts=blogposts)
+    def render_blog(self, page):
+        if page.isdigit() and int(page)>=1:
+            page = int(page)
+            blogposts = get_posts(5, (page-1)*5)
+
+            next_page_count = blogposts.count(offset=page*5, limit=5)
+            page_count = blogposts.count(offset=(page-1)*5, limit=5)
+
+            if page_count==0:
+                self.error(404)
+            else:
+                self.render("blog.html", blogposts=blogposts, page=page,
+                                         next_page_count=next_page_count)
+        else:
+            self.error(404)
 
     def get(self):
-        self.render_blog()
+        page = self.request.get("page","1") # default to 1
+        self.render_blog(page)
 
 
 class NewPost(Handler):
     def render_new_post_form(self, title="", body="", error=""):
-        #blogposts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC LIMIT 5")
         self.render("new-post.html", title=title, body=body, error=error)
 
     def get(self):
@@ -88,7 +89,7 @@ class ViewPost(Handler):
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', MainHandler),
     ('/blog', Blog),
     ('/newpost', NewPost),
     webapp2.Route('/blog/<id:\d+>', ViewPost)
