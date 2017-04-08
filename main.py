@@ -25,6 +25,7 @@ class BlogPost(db.Model):
     body = db.TextProperty(required=True)
     created = db.DateTimeProperty(auto_now_add=True)
 
+
 class MainPage(Handler):
     def render_front(self, title="", body="", error=""):
         blogposts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC")
@@ -71,7 +72,8 @@ class NewPost(Handler):
         if title and body:
             b = BlogPost(title=title, body=body)
             b.put() # stores post in database
-            self.redirect("/blog")
+            post_route = "/blog/"+str(b.key().id())
+            self.redirect(post_route)
         else:
             error = "We need a title and some text!"
             self.render_new_post_form(title, body, error)
@@ -81,6 +83,7 @@ class ViewPost(Handler):
      def get(self, id):
          id = int(id)
          blogpost = BlogPost.get_by_id(id)
+
          self.render("view-post.html", blogpost=blogpost, id=id)
 
 

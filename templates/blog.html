@@ -9,7 +9,9 @@
 <h2>Old Posts</h2>
 {% for blogpost in blogposts %}
     <div class="post">
-        <div class="post-title">{{blogpost.title}}</div>
+        <div class="post-title">
+            <a href="\blog\{{blogpost.key().id()}}">{{blogpost.title}}</a>
+        </div>
         <pre class="post-body">{{blogpost.body}}</pre>
         <!-- preserves html white space -->
     </div>
